@@ -1,0 +1,137 @@
+package com.main;
+
+
+import java.awt.Button;
+import java.awt.Label;
+import java.awt.TextField;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.IOException;
+
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+
+public class Practise_UI {
+	
+
+	public static void main(String[] args)throws IOException {
+		JFrame frame= new JFrame();
+		frame=new JFrame("Choose Your Title");
+		
+		//Look and Feel
+		try {
+			UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+			//UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
+			//UIManager.setLookAndFeel("com.sun.java.swing.plaf.gtk.GTKLookAndFeel");
+		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
+				| UnsupportedLookAndFeelException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		
+		Label label1,label2,label3;
+		TextField text1,text2,text3;
+		//Create labels
+		label1=new Label("Choose Directory 1");
+		label2=new Label("Choose Directory 2");
+		label3=new Label("Choose Output Location");
+		//Set Label Placement
+		label1.setBounds(20,50,150,30);
+		label2.setBounds(20, 100, 150, 30);
+		label3.setBounds(20, 150, 150, 30);
+		//Add Label to frame
+		frame.add(label1);
+		frame.add(label2);
+		frame.add(label3);
+		
+		
+		
+		//Initialise text feilds
+		 text1=new TextField("");
+		 text2=new TextField("");
+		 text3=new TextField("");
+		//Set TextFeild Placement
+		text1.setBounds(180,50,330,30);
+		text2.setBounds(180,100,330,30);
+		text3.setBounds(180,150,330,30);
+		//add text files to Frame
+		frame.add(text1);
+		frame.add(text2);
+		frame.add(text3);
+		 
+		//Create Buttons
+		Button button_1=new Button("Broswe File1");
+		Button button_2=new Button("Brosew File2");
+		Button button_3=new Button("Brosew File3");
+		Button button_4=new Button("Start");
+		Button button_5=new Button("Exit");
+		//Set Button Placement
+		button_1.setBounds(550,50,80,30);
+		button_2.setBounds(550,100,80,30);
+		button_3.setBounds(550,150,80,30);
+		button_4.setBounds(180,300,60,30);
+		button_5.setBounds(270,300,60,30);
+		//add buttons to Frame
+		frame.add(button_1);
+		frame.add(button_2);
+		frame.add(button_3);
+		frame.add(button_4);
+		frame.add(button_5);
+		
+		
+		//Java Action Listener
+		 button_1.addActionListener(new ActionListener(){  
+			    public void actionPerformed(ActionEvent e){  
+			    	JFileChooser chooser = new JFileChooser();
+			    	chooser.setCurrentDirectory(new java.io.File("."));
+		        	chooser.setDialogTitle("choosertitle");
+		        	chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+		        	chooser.setAcceptAllFileFilterUsed(false);
+		        	if(chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION){
+		        		text1.setText(chooser.getSelectedFile().getPath());
+		        	}  
+			    }  
+			    });
+		 button_2.addActionListener(new ActionListener(){  
+			    public void actionPerformed(ActionEvent e){  
+			    	JFileChooser chooser = new JFileChooser();
+			    	chooser.setCurrentDirectory(new java.io.File("."));
+		        	chooser.setDialogTitle("choosertitle");
+		        	chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+		        	chooser.setAcceptAllFileFilterUsed(false);
+		        	if(chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION){
+		        		text2.setText(chooser.getSelectedFile().getPath());
+		        	}  
+			    }  
+			    });
+		 button_3.addActionListener(new ActionListener(){  
+			    public void actionPerformed(ActionEvent e){  
+			    	JFileChooser chooser = new JFileChooser();
+			    	chooser.setCurrentDirectory(new java.io.File("."));
+		        	chooser.setDialogTitle("choosertitle");
+		        	chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+		        	chooser.setAcceptAllFileFilterUsed(false);
+		        	if(chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION){
+		        		text3.setText(chooser.getSelectedFile().getPath());
+		        	}  
+			    }  
+			    });
+		 button_5.addActionListener(new ActionListener(){  
+			    public void actionPerformed(ActionEvent e){  
+			    	System.exit(0);
+			    }  
+			    });
+
+		 
+		 
+		//Set Dimension of frame
+		frame.setSize(700,450);
+		frame.setLocationRelativeTo(null);
+		frame.setLayout(null);
+		frame.setVisible(true);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	}
+}
