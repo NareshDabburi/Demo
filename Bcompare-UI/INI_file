@@ -1,0 +1,14 @@
+cd /d K:\VM\Compare\batch
+
+PDFCOMPARE -I=K:\VM\Compare\Ini\1.Ini -Log=%3 %1 %2 -o %4 -R=%5 -rfmt=csv,ALL
+pause
+cd /d K:\VM\Compare\Logs
+set FE=.pdf
+echo %6%FE% >> %5 
+
+type %5 >> Batch_Compare_Results.csv
+
+pause
+
+
+
