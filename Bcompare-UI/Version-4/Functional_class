@@ -1,0 +1,154 @@
+import java.io.File;
+import java.io.FileWriter;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+
+import javax.swing.JOptionPane;
+public class Functional_class {
+
+	public static void func(String sourceFilesDir,String destFilesDir,String output_loc,String OTCompare_Path,ArrayList<String>al_INI_absPath) {
+		try {
+			//String sourceFilesDir = "D:\\OutpuComparePOC\\Output\\Output95";
+	        //String destFilesDir = "D:\\OutpuComparePOC\\Output\\Output164";
+	        
+	        int length_sourceFilesDir=sourceFilesDir.length();
+	        int length_destFilesDir=destFilesDir.length();
+	        
+	        File[] sourceFiles = new File(sourceFilesDir).listFiles();
+	        //String output_loc="D:\\OutpuComparePOC\\Output\\Compare_Results";  
+	        
+	        
+	        FileWriter filewriter_bat=new FileWriter(OTCompare_Path+"\\"+"Output_Compare.bat");
+	        FileWriter filewriter_txt=new FileWriter(OTCompare_Path+"\\"+"ExtraFiles.txt");
+	        
+	        
+	        String newLine = System.getProperty("line.separator");
+	        
+	        ArrayList<String> al_source=new ArrayList<String>();
+	        ArrayList<String> al_destination=new ArrayList<String>();
+	        
+	        ArrayList<String> al_srcfilename=new ArrayList<String>();
+	        ArrayList<String> al_desfilename=new ArrayList<String>();
+	        
+	        File[] source=listf(sourceFilesDir,al_source,output_loc,length_sourceFilesDir);
+	        File[] destination=listf1(destFilesDir,al_destination);
+	        
+	        for(int i=0;i<al_source.size();i++) {
+	        	al_srcfilename.add(al_source.get(i).substring(length_sourceFilesDir));	
+	        }
+	        
+	        for(int i=0;i<al_destination.size();i++) {
+	        	al_desfilename.add(al_destination.get(i).substring(length_destFilesDir));
+	        }
+	        StringBuilder stringBuilder = new StringBuilder();
+	        String str_temp=null;
+	        for(int j=0;j< al_INI_absPath.size();j++) {
+				stringBuilder.append(al_INI_absPath.get(j)+" ");
+				str_temp=stringBuilder.toString();
+			}
+	        int count_files=0;
+	       
+	        for(int i=0;i<al_srcfilename.size();i++) {
+	        	if(al_desfilename.contains(al_srcfilename.get(i))) {
+	        		count_files++;
+	        		int index=al_srcfilename.get(i).indexOf(".");
+	        		String extension=al_srcfilename.get(i).substring(index+1);
+	        		String getName=al_srcfilename.get(i).substring(0, index);
+	        		String OutputFile_name2=output_loc+getName+"_"+extension+"."+"csv";
+	        		String OutputFile_name1=output_loc+getName+"_"+extension+"."+extension;
+        			String Reference_fileName=sourceFilesDir+al_srcfilename.get(i);
+        			String Compared_fileName=destFilesDir+al_srcfilename.get(i);
+	        		if(al_INI_absPath.isEmpty()) {
+	        			//filewriter_bat.append(extension+"Compare.exe"+" -o"+" "+sourceFilesDir+al_srcfilename.get(i)+" "+destFilesDir+al_srcfilename.get(i)+" "+output_loc+getName+extension+"_result.cmp" +newLine);
+	        			
+	        		    filewriter_bat.append(extension+"Compare.exe"+" -o "+"-"+extension+"report="+OutputFile_name1+" -r="+OutputFile_name2+" -rfmt=CSV,ALL, "+Reference_fileName+" "+Compared_fileName+newLine);}
+	        		
+	        		else  {
+	        			System.out.println(str_temp);
+	        			filewriter_bat.append(extension+"Compare.exe"+" -o"+" "+"-i="+str_temp+" -"+extension+"report="+OutputFile_name1+" -r="+OutputFile_name2+" -rfmt=CSV,ALL, "+Reference_fileName+" "+Compared_fileName+newLine);	
+	        		}
+	        	}
+	        	else {
+	        		filewriter_txt.append(sourceFilesDir+al_srcfilename.get(i)+newLine);
+	        	}
+	        }
+	        for(int i=0;i<al_desfilename.size();i++) {
+	        	if(!al_srcfilename.contains(al_desfilename.get(i))) {
+	        		filewriter_txt.append(destFilesDir+al_desfilename.get(i)+newLine);
+	        	}	
+	        	}
+	        
+	        
+	        HashMap<String ,Integer> hm= new HashMap<String,Integer>();
+	        for(int i=0;i<al_srcfilename.size();i++) {
+	        	hm.put(al_srcfilename.get(i),1);
+	        }
+	        
+	       
+	        
+	        for(int i=0;i<al_desfilename.size();i++) {
+	        	if(hm.containsKey(al_desfilename.get(i))) {
+	        		hm.put(al_desfilename.get(i),hm.get(al_desfilename.get(i))-1);
+	        	}
+	        }
+	        
+	        for(int i=0;i<hm.size();i++) {
+	        	if(hm.get(i)==1) {
+	        		System.out.println(hm.get(i));
+	        	}
+	        }
+	        System.out.println(hm);
+	        
+	        System.out.println("Total Files = "+count_files);
+	        filewriter_bat.append("pause");
+	        filewriter_txt.close();
+	        filewriter_bat.close();
+	        JOptionPane.showMessageDialog(null, "Bat File Generated", "Completed", JOptionPane.CLOSED_OPTION);
+			}
+			catch(Exception e){
+				e.printStackTrace();
+			}
+		
+
+	}
+	
+	public static File[] listf(String directoryName,ArrayList al_source,String output_loc,int length_sourceFilesDir) {
+		File directory = new File(directoryName);
+
+	    // get all the files from a directory
+	    File[] fList = directory.listFiles();
+
+	    for (File file : fList) {
+	        if (file.isFile()) {
+	        	if (file.getAbsolutePath().endsWith(".pdf") || (file.getAbsolutePath().endsWith(".ps")||(file.getAbsolutePath().endsWith(".afp")))) {
+	            al_source.add(file.getAbsolutePath());}
+	        } else if (file.isDirectory()) {
+	        	new File(output_loc+file.getAbsolutePath().substring(length_sourceFilesDir)).mkdirs();
+	            listf(file.getAbsolutePath(),al_source,output_loc,length_sourceFilesDir);
+	        }
+	    }
+	    
+	    return fList;
+	}
+	
+	public static File[] listf1(String directoryName,ArrayList al_destination) {
+		File directory = new File(directoryName);
+
+	    // get all the files from a directory
+	    File[] fList = directory.listFiles();
+
+	    for (File file : fList) {
+	        if (file.isFile()) {
+	        	if (file.getAbsolutePath().endsWith(".pdf") || (file.getAbsolutePath().endsWith(".ps")||(file.getAbsolutePath().endsWith(".afp")))) {
+	            al_destination.add(file.getAbsolutePath());}
+	        } else if (file.isDirectory()) {
+	            listf1(file.getAbsolutePath(),al_destination);
+	        }
+	    }
+	    //System.out.println(fList);
+	    return fList;
+	}
+}
