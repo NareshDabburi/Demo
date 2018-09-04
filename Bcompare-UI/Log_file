@@ -1,0 +1,79 @@
+CPF000I PdfCompare Batch. v6.0.007.3834  11/18/2016. Copyright (c) 2008-2016 Open Text. All Rights Reserved. Trademarks owned by Open Text.
+CPF001I Starting PdfCompare Batch.                                            
+CPF020I No INI file defined. Running with default settings.                   
+CPF055I Your software expires in 179 days                                     
+CPF015I Using C:\ProgramData\Hewlett-Packard\HP Exstream\AfpVIP.ini as main INI file.
+CPF033I Comparing D:\OutpuComparePOC\Output\OutputNew95\Billing95.pdf to D:\OutpuComparePOC\Output\OutputNew164\Billing95.pdf.
+CPF013I Not using VIP file for the reference file.                            
+CPF014I Not using VIP file for the compared file.                             
+CPF042I Comparing files in parallel mode.                                     
+CPF070I Raster comparisons will be done with a color depth of 1 bits.         
+CPF000I                                                                       
+CPF083I Page 1/Page 1: differences found.                                     
+CPF000I                                                                       
+CPF083I Page 2/Page 2: differences found.                                     
+<Producer>:Hewlett-Packard PdfCompare Batch v6.0.007.3834 11/18/2016
+<ReportFormat>:2.10
+<ReportTime>:09/04/2018 18:35:40 910
+<Files>:"D:\OutpuComparePOC\Output\OutputNew95\Billing95.pdf":"D:\OutpuComparePOC\Output\OutputNew164\Billing95.pdf"
+<FilesSize>:23097:23069
+<FilesTime>:08/27/2018 16:51:00:08/27/2018 16:52:28
+<CompareOptions>:Parallel
+<Range>:1:2:!:1:2
+<AreaStat>: Full Page:2:2
+<CheckedPagesCount>:2:2:1
+<SkippedInDoc1PagesCount>:0:0:/
+<SkippedInDoc2PagesCount>:0:0:/
+<AddedPagesCount>:        0:0:+
+<RemovedPagesCount>:      0:0:-
+<SamePagesCount>:         0:0:=
+<DifferPagesCount>:       2:1:!
+CPF130I Number of pages: 2                                                    
+CPF121I Number of identical pages: 0                                          
+CPF122I Number of difference pages: 2                                         
+CPF000I                                                                       
+CPF131I Difference breakdown by area                                          
+CPF132I   -  Full Page                               : 2                      
+CPF019W There are differences. Check the report.                              
+CPF031I 2 pages have been checked for the reference file, 2 for the compared file.
+CPF002I Ending PdfCompare Batch with return code 4.                           
+CPF008P Comparing page 2 with page 2.                                         
+CPF008P Comparing page 2 with page 2.                                         
+                                     
+CPF000I PdfCompare Batch. v6.0.007.3834  11/18/2016. Copyright (c) 2008-2016 Open Text. All Rights Reserved. Trademarks owned by Open Text.
+CPF001I Starting PdfCompare Batch.                                            
+CPF020I No INI file defined. Running with default settings.                   
+CPF055I Your software expires in 179 days                                     
+CPF015I Using C:\ProgramData\Hewlett-Packard\HP Exstream\AfpVIP.ini as main INI file.
+CPF033I Comparing D:\OutpuComparePOC\Output\OutputNew95\Billing952.pdf to D:\OutpuComparePOC\Output\OutputNew164\Billing952.pdf.
+CPF013I Not using VIP file for the reference file.                            
+CPF014I Not using VIP file for the compared file.                             
+CPF042I Comparing files in parallel mode.                                     
+CPF070I Raster comparisons will be done with a color depth of 1 bits.         
+CPF000I                                                                       
+CPF083I Page 1/Page 1: differences found.                                     
+<Producer>:Hewlett-Packard PdfCompare Batch v6.0.007.3834 11/18/2016
+<ReportFormat>:2.10
+<ReportTime>:09/04/2018 18:35:45 391
+<Files>:"D:\OutpuComparePOC\Output\OutputNew95\Billing952.pdf":"D:\OutpuComparePOC\Output\OutputNew164\Billing952.pdf"
+<FilesSize>:20713:20690
+<FilesTime>:08/27/2018 16:51:00:08/27/2018 16:52:28
+<CompareOptions>:Parallel
+<Range>:1:1:!:1:1
+<AreaStat>: Full Page:1:1
+<CheckedPagesCount>:1:1:1
+<SkippedInDoc1PagesCount>:0:0:/
+<SkippedInDoc2PagesCount>:0:0:/
+<AddedPagesCount>:        0:0:+
+<RemovedPagesCount>:      0:0:-
+<SamePagesCount>:         0:0:=
+<DifferPagesCount>:       1:1:!
+CPF130I Number of pages: 1                                                    
+CPF121I Number of identical pages: 0                                          
+CPF122I Number of difference pages: 1                                         
+CPF000I                                                                       
+CPF131I Difference breakdown by area                                          
+CPF132I   -  Full Page                               : 1                      
+CPF019W There are differences. Check the report.                              
+CPF031I 1 pages have been checked for the reference file, 1 for the compared file.
+CPF002I Ending PdfCompare Batch with return code 4.                           
