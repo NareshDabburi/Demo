@@ -1,0 +1,202 @@
+package com.main;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Scanner;
+public class writing_To_csv {
+	
+		public static void main(String[] args) {
+			//Scanner sc=new Scanner(System.in);
+			String fileName=args[0];
+			String output_loc=args[1];
+			String src_loc=args[2];
+			String des_loc=args[3];
+			String txt_loc=args[4];
+			String count_files_string=args[5];
+ 
+			int count_files=Integer.parseInt(count_files_string);
+			
+			
+			
+			/*String fileName=sc.nextLine();
+			String output_loc=sc.nextLine();			
+			String src_loc=sc.nextLine();
+			String des_loc=sc.nextLine();
+			String txt_loc=sc.nextLine();
+			int count_files=sc.nextInt();*/
+			
+			
+			System.out.println("File reading started..");
+			File file = new File(fileName);
+			File file_txt=new File(txt_loc);
+			
+			
+			int linecount = 0;
+			int identicalFiles = 0;
+			int nonIdenticalFiles = 0;
+			String array_fileNames[] = null;
+			String fullFileNames;
+			String returnedCodeLine;
+			String result = "";
+			String returnCode = "";
+			try {
+
+				Date date = new Date();
+				SimpleDateFormat formatter = new SimpleDateFormat("ddMMyyyy_HHmmss");
+				File reportFile = new File(output_loc + "\\Report" + formatter.format(date) + ".csv");
+				PrintWriter pw = new PrintWriter(reportFile);
+				StringBuilder sb = new StringBuilder();
+				print_legend(sb);
+
+				System.out.println("Buffered reader started..");
+				BufferedReader br = new BufferedReader(new FileReader(file));
+				BufferedReader br_txt = new BufferedReader(new FileReader(file_txt));
+				String data;
+				while ((data = br.readLine()) != null) {
+					linecount++;
+					// Boolean fileStart = data.contains("CPF000I");
+
+					Boolean bfiles = data.contains("<Files>:");
+					if (bfiles) {
+						int indexfound = data.indexOf(":");
+						if (indexfound > -1) {
+							fullFileNames = data.substring(indexfound + 1);
+							array_fileNames = fullFileNames.split(":");
+							// Reference File - array_fileNames[0] + array_fileNames[1]
+							// Compared File - array_fileNames[2] + array_fileNames[]
+						}
+					}
+					Boolean returnCodeav = data.contains("CPF002I ");
+					if (returnCodeav) {
+						data = data.replaceAll(" ", "");
+						if (data.endsWith("0.")) {
+							result = "Identical";
+							identicalFiles++;
+						} else {
+							returnCode = data.substring(data.lastIndexOf(".") - 1).replace(".", "");
+							nonIdenticalFiles++;
+							result = "Non-Identical";
+						}
+						// Identical - identical
+						// Return Code - returnCode
+
+						if (array_fileNames != null) {
+							sb.append("=HYPERLINK(" + array_fileNames[0] + ":" + array_fileNames[1] + ")");
+							sb.append(',');
+							sb.append("=HYPERLINK(" + array_fileNames[2] + ":" + array_fileNames[3] + ")");
+							sb.append(',');
+							sb.append(result);
+							sb.append(',');
+							sb.append(returnCode);
+							sb.append('\n');
+						}
+					}
+				}
+				String data_txt;
+				int count_missingfiles=0;
+				while ((data_txt = br_txt.readLine()) != null) {
+					count_missingfiles++;
+					if(data_txt.contains(src_loc)) {
+						sb.append(data_txt);
+						sb.append(",");
+						sb.append(" ");
+						sb.append(",");
+						sb.append("File Missing");
+						sb.append('\n');
+						
+					}else {
+						sb.append(" ");
+						sb.append(",");
+						sb.append(data_txt);
+						sb.append(",");
+						sb.append("File Missing");
+						sb.append('\n');
+						
+					}		
+				}
+				sb.append("No of Processed Files: " + count_files);
+				sb.append('\n');
+				sb.append("No of Identical Files: " + identicalFiles);
+				sb.append('\n');
+				sb.append("No of Non-Identical Files: " + nonIdenticalFiles);
+				sb.append('\n');
+				sb.append("No of Missing Files: "+count_missingfiles);
+				pw.write(sb.toString());
+				pw.close();
+				System.out.println("Report generated. - " + reportFile);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			
+		}
+		
+		
+		public static void print_legend(StringBuilder sb) {
+			sb.append("Legend");
+			sb.append('\n');
+			sb.append("Return Code");
+			sb.append(',');
+			sb.append("Description");
+			sb.append('\n');
+			
+			
+			sb.append("0");
+			sb.append(',');
+			sb.append("Information—For informational purposes only");
+			sb.append('\n');
+			
+			
+			sb.append("2");
+			sb.append(',');
+			sb.append("Warning—Indicates that resources such as fonts were missing while running the comparison tool");
+			sb.append('\n');
+			
+			
+			sb.append("4");
+			sb.append(',');
+			sb.append("Warning—Contains information to consider but the created output is correct");
+			sb.append('\n');
+			
+			
+			sb.append("8");
+			sb.append(',');
+			sb.append("Error—Indicates a user error that prevents the program from continuing");
+			sb.append('\n');
+			
+			sb.append("12");
+			sb.append(',');
+			sb.append("Severe—Indicates a serious error that prevents the program from continuing");
+			sb.append('\n');
+			
+			sb.append("16");
+			sb.append(',');
+			sb.append("Fatal—Indicates an error that led to program shutdown and the risk of not exiting the program correctly");
+			sb.append('\n');
+			
+			
+			sb.append("20");
+			sb.append(',');
+			sb.append("Terminal—Indicates an error that immediately ends the program. You cannot determine whether the program exited properly.");
+			sb.append('\n');
+			sb.append('\n');
+			
+			
+			
+			
+			sb.append("Final Report After Comparison");
+			sb.append('\n');
+			sb.append("Referenced File");
+			sb.append(',');
+			sb.append("Compared File");
+			sb.append(',');
+			sb.append("Result");
+			sb.append(',');
+			sb.append("Retrun Code");
+			sb.append('\n');
+		}
+}
