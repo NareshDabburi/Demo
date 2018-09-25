@@ -1,0 +1,37 @@
+package DAO;
+import java.util.*;
+public class Legends_Header {
+		private int Return_Code;
+		private String Description;
+		
+		
+		public int getReturn_Code() {
+			return Return_Code;
+		}
+		
+		public String getDescription() {
+			return Description;
+		}
+
+		public void setDescription(String description) {
+			Description = description;
+		}
+
+		public void setReturn_Code(int return_Code) {
+			Return_Code = return_Code;
+		}
+		
+		public Legends_Header(int return_Code, String description) {
+			super();
+			Return_Code = return_Code;
+			Description = description;
+		}
+
+		public Legends_Header() {
+			super();
+		}
+
+		
+		
+
+}
