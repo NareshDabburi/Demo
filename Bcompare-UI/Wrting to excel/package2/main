@@ -1,0 +1,310 @@
+package com.main;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+
+import java.util.Date;
+import java.util.Scanner;
+
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+
+import org.apache.poi.hssf.usermodel.HSSFFont;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.FillPatternType;
+import org.apache.poi.ss.usermodel.Font;
+import org.apache.poi.ss.usermodel.IndexedColors;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.common.usermodel.HyperlinkType;
+import org.apache.poi.ss.usermodel.CreationHelper;
+import org.apache.poi.ss.usermodel.Hyperlink;
+import com.entities.Writing_Legend_to_Excel;
+
+public class Writing_Results_to_Excel {
+
+	public static void main(String[] args) throws IOException {
+		
+		/*Scanner sc=new Scanner(System.in);
+	    String fileName=sc.nextLine();
+		String output_loc=sc.nextLine();			
+		String src_loc=sc.nextLine();
+		String des_loc=sc.nextLine();
+		String txt_loc=sc.nextLine();
+		String count_files=sc.nextLine();
+		String bat_loc=sc.nextLine();*/
+		
+		String fileName=args[0];
+		String output_loc=args[1];
+		String src_loc=args[2];
+		String des_loc=args[3];
+		String txt_loc=args[4];
+		String count_files=args[5];
+		String bat_loc=args[6];
+		
+		
+		
+		int linecount = 0;
+		int identicalFiles = 0;
+		int nonIdenticalFiles = 0;
+		String array_fileNames[] = null;
+		String fullFileNames;
+		String returnedCodeLine;
+		String result = "";
+		String returnCode = "";
+		String report_file_name=null;
+		
+		
+		System.out.println("File reading started..");
+		HSSFWorkbook workbook =Writing_Legend_to_Excel.print_legend();
+		File file = new File(fileName);
+		File file_txt=new File(txt_loc);
+		
+		Date date = new Date();
+		SimpleDateFormat formatter = new SimpleDateFormat("ddMMyyyy_HHmmss");
+		
+		
+		HSSFSheet sheet_1=workbook.createSheet("Results");
+		CreationHelper createHelper = workbook.getCreationHelper();
+	
+		//Style Cell
+		CellStyle style_RED = workbook.createCellStyle();
+		style_RED.setFillForegroundColor(IndexedColors.RED.getIndex());
+		style_RED.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+		
+		CellStyle style_GREY = workbook.createCellStyle();
+		style_GREY.setFillForegroundColor(IndexedColors.GREY_25_PERCENT.getIndex());
+		style_GREY.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		//Create Sheeet
+		Row row_heading=sheet_1.createRow(0);
+		
+		
+		row_heading.createCell(0).setCellValue("Final Report After Comparison");
+		
+		CellStyle stylerowHeading = workbook.createCellStyle();
+		//stylerowHeading.setFillBackgroundColor(IndexedColors.GREY_50_PERCENT.getIndex());
+		Font font_lengend=workbook.createFont();
+		font_lengend.setBold(true);
+		font_lengend.setFontName(HSSFFont.FONT_ARIAL);
+		font_lengend.setFontHeightInPoints((short) 11);
+		stylerowHeading.setFont(font_lengend);
+		row_heading.getCell(0).setCellStyle(stylerowHeading);
+		row_heading.getCell(0).setCellStyle(style_GREY);
+		//Headers
+		
+		Row row_heading_header=sheet_1.createRow(1);
+		row_heading_header.createCell(0).setCellValue("Referenced File");
+		row_heading_header.createCell(1).setCellValue("Compared File");
+		row_heading_header.createCell(2).setCellValue("Result");
+		row_heading_header.createCell(3).setCellValue("Return Code");
+		row_heading_header.createCell(4).setCellValue("Report File");
+		
+		for(int i=0;i<5;i++) {
+			CellStyle stylerowHeading_1 =workbook.createCellStyle();
+			Font font=workbook.createFont();
+			font.setBold(true);
+			font.setFontName(HSSFFont.FONT_ARIAL);
+			font.setFontHeightInPoints((short) 9);
+			stylerowHeading_1.setFont(font);
+		    //stylerowHeading.setVerticalAlignment(CellStyle.);
+			row_heading_header.getCell(i).setCellStyle(stylerowHeading_1);	
+			row_heading_header.getCell(i).setCellStyle(style_GREY);
+		}
+		
+		
+		int row_num=2;
+		BufferedReader br = new BufferedReader(new FileReader(file));
+		BufferedReader br_txt = new BufferedReader(new FileReader(file_txt));
+		String data;
+		
+		
+		
+		while ((data = br.readLine()) != null) {
+			linecount++;
+			Boolean bfiles = data.contains("<Files>:");
+			if (bfiles) {
+				int indexfound = data.indexOf(":");
+				if (indexfound > -1) {
+					fullFileNames = data.substring(indexfound +1 );
+					array_fileNames = fullFileNames.split(":");
+				}
+			}
+			 
+			 
+			 
+			
+			Boolean returnCodereport=false;
+			if((data.contains("CPF019W "))||(data.contains("CMP019W "))||(data.contains("CPS019W "))){
+				returnCodereport=true;
+			}
+			
+			if(returnCodereport) {
+				
+				String [] report_file_name_split=array_fileNames[3].split("\\\\");
+				String temp=report_file_name_split[report_file_name_split.length-1];
+				int len_temp=temp.length();
+				int temp_index=temp.indexOf('.');
+				String temp_extension=temp.substring(temp_index+1,len_temp-1);
+				String temp_text=temp.substring(0, temp_index);
+				report_file_name=output_loc+"\\"+temp_text+"_"+temp_extension+'.'+"pdf";
+			}
+			
+			
+			Boolean returnCodeav=false;
+					if((data.contains("CPF002I "))||(data.contains("CMP002I "))||(data.contains("CPS002I "))){
+						 returnCodeav=true;
+					}
+			if (returnCodeav) {
+				data = data.replaceAll(" ", "");
+				if (data.endsWith("0.")) {
+					result = "Identical";
+					identicalFiles++;
+				} else {
+					returnCode = data.substring(data.lastIndexOf(".") - 1).replace(".", "");
+					nonIdenticalFiles++;
+					result = "Non-Identical";
+				}
+				if (array_fileNames != null) {
+					Hyperlink link_1 = createHelper.createHyperlink(HyperlinkType.FILE);
+					Hyperlink link_2 = createHelper.createHyperlink(HyperlinkType.FILE);
+					Hyperlink link_3 = createHelper.createHyperlink(HyperlinkType.FILE);
+					/*sb.append("=HYPERLINK(" + array_fileNames[0] + ":" + array_fileNames[1] + ")");
+					sb.append(',');
+					sb.append("=HYPERLINK(" + array_fileNames[2] + ":" + array_fileNames[3] + ")");
+					sb.append(',');
+					sb.append(result);
+					sb.append(',');
+					sb.append(returnCode);
+					sb.append('\n');*/
+					Row row_heading_results=sheet_1.createRow(row_num);
+					Cell cell_id_1=row_heading_results.createCell(0);
+					Cell cell_id_2=row_heading_results.createCell(1);
+					Cell cell_id_3=row_heading_results.createCell(2);
+					Cell cell_id_4=row_heading_results.createCell(3);
+					Cell cell_id_5=row_heading_results.createCell(4);
+					cell_id_1.setCellValue(array_fileNames[0].substring(1) + ":" + array_fileNames[1].substring(0, array_fileNames[1].length()-1));
+					link_1.setAddress(array_fileNames[0].substring(1) + ":" + array_fileNames[1].substring(0, array_fileNames[1].length()-1));
+					cell_id_1.setHyperlink(link_1);
+					cell_id_2.setCellValue(array_fileNames[2].substring(1) + ":" + array_fileNames[3].substring(0, array_fileNames[3].length()-1));
+					link_2.setAddress(array_fileNames[2].substring(1) + ":" + array_fileNames[3].substring(0, array_fileNames[3].length()-1));
+					cell_id_2.setHyperlink(link_2);
+					cell_id_3.setCellValue(result);
+					
+					if(report_file_name!=null) {
+					cell_id_5.setHyperlink(link_3);
+					cell_id_5.setCellValue(report_file_name);
+					link_3.setAddress(report_file_name);
+					}
+
+					if(result.equals("Identical")) {
+						cell_id_4.setCellValue(0);
+					}
+					else {
+						cell_id_4.setCellValue(Integer.parseInt(returnCode));
+					}
+					report_file_name=null;
+					
+				}
+				row_num++;
+			}
+		}
+		String data_txt;
+		int count_missingfiles=0;
+		while ((data_txt = br_txt.readLine()) != null) {
+			Hyperlink link_missing = createHelper.createHyperlink(HyperlinkType.FILE);
+			count_missingfiles++;
+			Row row_heading_results=sheet_1.createRow(row_num);
+			if(data_txt.contains(src_loc)) {
+				Cell cell_id_1=row_heading_results.createCell(0);
+				Cell cell_id_3=row_heading_results.createCell(2);
+				Cell cell_id_4=row_heading_results.createCell(3);
+				cell_id_1.setCellValue(data_txt);
+				link_missing.setAddress(data_txt);
+				cell_id_1.setHyperlink(link_missing);
+				cell_id_3.setCellValue("File Missing");
+				cell_id_4.setCellValue("N.A");
+				//cell_id_3.setCellStyle(style_RED);			
+			}else {
+				Cell cell_id_2=row_heading_results.createCell(1);
+				Cell cell_id_3=row_heading_results.createCell(2);
+				Cell cell_id_4=row_heading_results.createCell(3);
+				cell_id_2.setCellValue(data_txt);
+				link_missing.setAddress(data_txt);
+				cell_id_2.setHyperlink(link_missing);
+				cell_id_3.setCellValue("File Missing");
+				cell_id_4.setCellValue("N.A");
+				//cell_id_3.setCellStyle(style_RED);	
+			}	
+			row_num++;
+		}	
+		Row row_heading_results_1=sheet_1.createRow(row_num);
+		Cell cell_id_1=row_heading_results_1.createCell(0);
+		cell_id_1.setCellValue("No of Processed Files: " + (Integer.parseInt(count_files.trim())+count_missingfiles));
+		
+		row_num++;
+		Row row_heading_results_2=sheet_1.createRow(row_num);
+		Cell cell_id_2=row_heading_results_2.createCell(0);
+		cell_id_2.setCellValue("Total Number Of Files Compared: " +( identicalFiles+nonIdenticalFiles));
+		row_num++;
+		
+		Row row_heading_results_3=sheet_1.createRow(row_num);
+		Cell cell_id_3=row_heading_results_3.createCell(0);
+		cell_id_3.setCellValue("No of Identical Files: " + identicalFiles);
+		row_num++;
+		
+		Row row_heading_results_4=sheet_1.createRow(row_num);
+		Cell cell_id_4=row_heading_results_4.createCell(0);
+		cell_id_4.setCellValue("No of Non-Identical Files: " + nonIdenticalFiles);
+		row_num++;
+		
+		Row row_heading_results_5=sheet_1.createRow(row_num);
+		Cell cell_id_5=row_heading_results_5.createCell(0);
+		cell_id_5.setCellValue("No of Missing Files: "+count_missingfiles);
+		row_num++;
+		
+		
+		for(int i=0;i<row_num;i++) {
+			sheet_1.autoSizeColumn(i);
+		}
+		
+		
+		
+		
+		String reportFile=output_loc + "\\Summary Report" + formatter.format(date) + ".xls";
+		
+		FileOutputStream out=new FileOutputStream(new File(reportFile));
+		workbook.write(out);
+		out.close();
+		workbook.close();
+		br_txt.close();
+		br.close();
+		System.out.println("Report generated. - " + reportFile);
+		
+		
+		File file_bat=new File(bat_loc);
+		if(file_bat.exists()) {
+		file_bat.delete();}
+		
+		if(file_txt.exists()) {
+		file_txt.delete();}
+		
+		
+		
+	}
+}
+
