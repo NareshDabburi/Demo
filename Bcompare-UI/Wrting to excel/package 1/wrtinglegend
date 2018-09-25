@@ -1,0 +1,79 @@
+package com.entities;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.poi.hssf.usermodel.HSSFFont;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.*;
+
+import DAO.Legends_Header;
+public class Writing_Legend_to_Excel {
+	public static HSSFWorkbook print_legend() {
+		Legend legend_obj=new Legend();
+		HSSFWorkbook workbook= new HSSFWorkbook();
+		HSSFSheet sheet_1=workbook.createSheet("Legend");
+		
+		CellStyle style_GREY = workbook.createCellStyle();
+		style_GREY.setFillForegroundColor(IndexedColors.GREY_25_PERCENT.getIndex());
+		style_GREY.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+		
+		//Create Heading
+		Row row_heading_legend=sheet_1.createRow(0);
+		row_heading_legend.createCell(0).setCellValue("Legend");
+		
+		
+		CellStyle stylerowHeading_legend = workbook.createCellStyle();
+		stylerowHeading_legend.setFillBackgroundColor(IndexedColors.GREY_50_PERCENT.getIndex());
+		Font font_lengend=workbook.createFont();
+		font_lengend.setBold(true);
+		font_lengend.setFontName(HSSFFont.FONT_ARIAL);
+		font_lengend.setFontHeightInPoints((short) 11);
+		stylerowHeading_legend.setFont(font_lengend);
+		row_heading_legend.getCell(0).setCellStyle(stylerowHeading_legend);
+		row_heading_legend.getCell(0).setCellStyle(style_GREY);
+		//stylerowHeading_legend.setFillPattern(CellStyle.SOLID_FOREGROUND);
+		
+		
+		
+		Row row_heading=sheet_1.createRow(1);
+		row_heading.createCell(0).setCellValue("Return Code");
+		row_heading.createCell(1).setCellValue("Description");
+		
+		for(int i=0;i<2;i++) {
+			CellStyle stylerowHeading =workbook.createCellStyle();
+			Font font=workbook.createFont();
+			font.setBold(true);
+			font.setFontName(HSSFFont.FONT_ARIAL);
+			font.setFontHeightInPoints((short) 9);
+		    stylerowHeading.setFont(font);
+		    //stylerowHeading.setVerticalAlignment(CellStyle.);
+		    row_heading.getCell(i).setCellStyle(stylerowHeading);	
+		    row_heading.getCell(i).setCellStyle(style_GREY);
+		    
+		}
+		int row_num=2;
+		for(Legends_Header l :legend_obj.addall()) {
+			Row row=sheet_1.createRow(row_num);
+			Cell cell_id_1=row.createCell(0);
+			cell_id_1.setCellValue(l.getReturn_Code());
+			Cell cell_id_2=row.createCell(1);
+			cell_id_2.setCellValue(l.getDescription());
+			row_num++;
+		}
+		
+		for(int i=0;i<2;i++) {
+			sheet_1.autoSizeColumn(i);
+		}
+		
+		return workbook;
+		
+		
+		
+		
+	}
+
+}
