@@ -1,0 +1,19 @@
+package com.entities;
+import DAO.*;
+
+import java.util.*;
+
+public class Legend {
+	
+	public static List<Legends_Header> addall(){
+		List <Legends_Header> result=new ArrayList<Legends_Header>();
+		result.add(new Legends_Header(0,"Information—For informational purposes only"));
+		result.add(new Legends_Header(2,"Warning—Indicates that resources such as fonts were missing while running the comparison tool"));
+		result.add(new Legends_Header(4,"Warning—Contains information to consider but the created output is correct"));
+		result.add(new Legends_Header(8,"Error—Indicates a user error that prevents the program from continuing"));
+		result.add(new Legends_Header(12,"Severe—Indicates a serious error that prevents the program from continuing"));
+		result.add(new Legends_Header(16,"Fatal—Indicates an error that led to program shutdown and the risk of not exiting the program correctly"));
+		result.add(new Legends_Header(20,"Terminal—Indicates an error that immediately ends the program. You cannot determine whether the program exited properly."));
+		return result;
+	}
+}
