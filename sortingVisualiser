@@ -1,0 +1,101 @@
+package UserInterface;
+
+import java.awt.Color;
+
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JSlider;
+import javax.swing.JTable;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.border.Border;
+import javax.swing.border.EmptyBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+
+
+
+public class Sorting_visualizer {
+	
+	private final static int MAX_SIZE = 500;
+	private final static int MIN_SIZE = 1;
+	private final static int DEFAULT_size = 20;
+	
+	private final static String[] Sorts = {"Bubble", "Selection", "Insertion", "Merge"};
+	
+	private static JFrame frame=new JFrame();
+	private static JSlider size;
+	private static JLabel sizeVal,change_array_size;
+	
+	
+	public static void main(String[] args) {
+		frame=new JFrame("Sorting Visulaiser");
+		
+		JPanel panel=new JPanel(); 
+		panel.setBackground(Color.lightGray);  
+		panel.setBounds(0,0,1200,100);
+		
+		JButton Generate_New_Array=new JButton("Generate New Array");
+		Generate_New_Array.setBounds(30,30,200,30);
+		//Generate_New_Array.setBackground(Color.lightGray);
+		Generate_New_Array.setForeground(Color.BLACK);
+		Border emptyBorder = BorderFactory.createEmptyBorder();
+		Generate_New_Array.setBorder(emptyBorder);
+		
+		
+		change_array_size = new JLabel("Change Array Size :");
+		change_array_size.setBounds(250,30,200,30); 
+		
+		
+		
+		
+		size = new JSlider(MIN_SIZE, MAX_SIZE, DEFAULT_size);
+		size.setMinorTickSpacing(10);
+		size.setMajorTickSpacing(100);
+		size.setPaintTicks(true);
+		size.setBounds(470,35,100,30);
+		//size.setBackground(Color.lightGray);
+		
+		sizeVal = new JLabel("Size: 100 values");
+		sizeVal.setBounds(370,30,100,30);
+		
+		size.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent arg0) {
+				sizeVal.setText(("Size: " + Integer.toString(size.getValue()) + " values"));
+			}
+		});
+		
+		JComboBox dropdown=new JComboBox(Sorts);
+		dropdown.setBounds(670,33,100,30);
+		
+		JButton sort=new JButton("sort");
+		sort.setBounds(800,33,100,30);
+
+		
+		
+		/*Change_Array_Size.setBounds(250,20,200,30);
+		Change_Array_Size.setBackground(Color.lightGray);
+		Change_Array_Size.setForeground(Color.WHITE);*/
+		//Change_Array_Size.setBorder(emptyBorder);
+		
+		frame.add(sort);
+		frame.add(size);
+		frame.add(sizeVal);
+		frame.add(Generate_New_Array);
+		frame.add(change_array_size);
+		frame.add(dropdown);
+		frame.add(panel);  
+		frame.setSize(1200,700);
+		frame.setLocationRelativeTo(null);
+		frame.setLayout(null);
+		frame.setVisible(true);
+		frame.setResizable(false);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+	}
+
+}
